@@ -29,7 +29,7 @@ def my_gpustat():
     Returns a [safe] version of gpustat for this host.
         # See `--safe-zone` option of `gpuview start`.
         # Omit sensitive details, eg. uuid, username, and processes.
-        # Set color flag based on gpu temperature:
+        # Set color flag based on gpu utilization:
             # bg-warning, bg-danger, bg-success, bg-primary
 
     Returns:
@@ -60,11 +60,11 @@ def my_gpustat():
                 gpu.pop("query_time", None)
 
             gpu['flag'] = 'bg-primary'
-            if gpu['temperature.gpu'] > 75:
+            if gpu['utilization.gpu'] > 75:
                 gpu['flag'] = 'bg-danger'
-            elif gpu['temperature.gpu'] > 50:
+            elif gpu['utilization.gpu'] > 50:
                 gpu['flag'] = 'bg-warning'
-            elif gpu['temperature.gpu'] > 25:
+            elif gpu['utilization.gpu'] > 25:
                 gpu['flag'] = 'bg-success'
         return stat
     except Exception as e:
