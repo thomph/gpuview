@@ -63,7 +63,7 @@ def my_gpustat():
             gpu['flag'] = 'bg-primary'
             if gpu['users'] > 0:
                 gpu['flag'] = 'bg-danger'
-            elif :
+            else :
                 gpu['flag'] = 'bg-success'
         return stat
     except Exception as e:
