@@ -8,6 +8,7 @@ Core functions of gpuview.
 import os
 import json
 import subprocess
+import sys
 try:
     from urllib.request import urlopen
 except ImportError:
@@ -29,7 +30,7 @@ def my_gpustat():
     Returns a [safe] version of gpustat for this host.
         # See `--safe-zone` option of `gpuview start`.
         # Omit sensitive details, eg. uuid, username, and processes.
-        # Set color flag based on gpu utilization:
+        # Set color flag based on gpu temperature:
             # bg-warning, bg-danger, bg-success, bg-primary
 
     Returns:
@@ -60,11 +61,9 @@ def my_gpustat():
                 gpu.pop("query_time", None)
 
             gpu['flag'] = 'bg-primary'
-            if gpu['utilization.gpu'] > 75:
+            if gpu['users'] > 0:
                 gpu['flag'] = 'bg-danger'
-            elif gpu['utilization.gpu'] > 50:
-                gpu['flag'] = 'bg-warning'
-            elif gpu['utilization.gpu'] > 25:
+            elif :
                 gpu['flag'] = 'bg-success'
         return stat
     except Exception as e:
@@ -88,7 +87,10 @@ def all_gpustats():
     for url in hosts:
         try:
             raw_resp = urlopen(url + '/gpustat')
-            gpustat = json.loads(raw_resp.read())
+            if sys.version_info[0] < 3:
+                gpustat = json.loads(raw_resp.read())
+            else:
+                gpustat = json.loads(raw_resp.read().decode('utf-8'))
             raw_resp.close()
             if not gpustat or 'gpus' not in gpustat:
                 continue
